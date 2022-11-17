@@ -12,7 +12,7 @@ setuptools.setup(
     author="JunBeum Cho",
     author_email="ahengksk@gmail.com",
     description="Common packages installer on MAC",
-    url = 'https://github.com/JunBeum-Cho/hola-mac',
+    url = 'https://github.com/JunBeum-Cho/hola-dev',
     download_url = 'https://github.com/user/reponame/archive/v_01.tar.gz',
     entry_points={"console_scripts": ["hola-dev=src.__main__:main"]},
     keywords = ['mac', 'package installers'],
