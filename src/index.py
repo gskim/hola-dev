@@ -1,6 +1,17 @@
 import os
+import json
+import requests
 import platform
 from InquirerPy import inquirer
+from InquirerPy.base.control import Choice
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
+from dotenv import load_dotenv
 
 COMMON_PACKAGES = {
     'Google Chrome': 'brew install --cask google-chrome',
@@ -32,6 +43,8 @@ DEV_PACKAGES = {
 
 
 def main():
+    load_dotenv()
+
     if platform.system() != 'Darwin':
         print('해당 CLI는 MAC에서만 작동합니다.')
         return
@@ -46,7 +59,7 @@ def main():
 
     action = inquirer.select(
         message="실행할 옵션을 선택해주세요.",
-        choices=["MAC 기본 패키지 설치", "개발 관련 패키지 설치", "개발환경 셋팅", "로컬 서버 접근 주소 얻기", "종료"],
+        choices=["MAC 기본 패키지 설치", "개발 관련 패키지 설치", "개발환경 셋팅", "로컬 서버 접근 주소 얻기", "브라우저 자동화"],
         default=None,
     ).execute()
 
@@ -58,8 +71,8 @@ def main():
         set_environment()
     elif action == '로컬 서버 접근 주소 얻기':
         get_localtunnel_address()
-    elif action == '종료':
-        print('CLI를 종료합니다')
+    elif action == '브라우저 자동화':
+        browser_automation()
         
 
 def install_common_packages():
@@ -125,6 +138,39 @@ def get_localtunnel_address():
     os.system(f"lt --port {port} --subdomain {domain}")
 
 
+def browser_automation():
+    if not os.environ.get('JSONBIN_ENDPOINT', None) or  not os.environ.get('JSONBIN_ENDPOINT', None):
+        print('.env 파일을 확인해주세요.')
+        return
+    
+    profile_list = requests.get(
+        url = os.environ.get('JSONBIN_ENDPOINT'), 
+        headers = {'X-Access-Key': os.environ.get('JSONBIN_ACCESSKEY')}
+    ).json()
+
+    selected_profile = inquirer.select(
+        message="프로필을 선택해주세요.",
+        choices=[
+            Choice(profile, name=f'{profile["username"]} ({profile["company"]})') for profile in profile_list['record']['items']
+        ],
+        default=None,
+    ).execute()
+
+    open_browser(selected_profile)
+
+    
+def open_browser(profile):
+    options = webdriver.ChromeOptions()
+    options.add_argument('window-size=1920x1080')
+    options.add_argument("disable-gpu")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--no-sandbox")
+    options.add_experimental_option("detach", True)
+    
+    driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=options)
+    driver.get(url=os.environ.get('BROWSER_ENDPOINT'))
+    driver.execute_script(f"window.localStorage.setItem('userinfo','" + json.dumps(profile)+ "');")
+    driver.refresh()
 
 if __name__ == '__main__':
     main()

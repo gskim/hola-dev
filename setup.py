@@ -8,7 +8,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="hola-dev",
-    version="0.0.1",
+    version="0.0.2",
     author="JunBeum Cho",
     author_email="ahengksk@gmail.com",
     description="Common packages installer on MAC",
