@@ -11,7 +11,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
-from dotenv import load_dotenv
+
+from .utils.util import set_secret_manager_env
 
 COMMON_PACKAGES = {
     'Google Chrome': 'brew install --cask google-chrome',
@@ -43,7 +44,7 @@ DEV_PACKAGES = {
 
 
 def main():
-    load_dotenv()
+    set_secret_manager_env()
 
     if platform.system() != 'Darwin':
         print('해당 CLI는 MAC에서만 작동합니다.')

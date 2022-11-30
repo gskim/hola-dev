@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 webdriver-manager = "*"
 selenium = "*"
+boto3 = "*"
 fake-useragent = "*"
 inquirerpy = "*"
 requests = "*"

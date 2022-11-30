@@ -4,3 +4,4 @@ inquirerpy
 fake-useragent
 webdriver-manager
 python-dotenv
+boto3
