@@ -12,7 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 
-from .utils.util import set_secret_manager_env
+from src.utils.util import set_secret_manager_env
 
 COMMON_PACKAGES = {
     'Google Chrome': 'brew install --cask google-chrome',
