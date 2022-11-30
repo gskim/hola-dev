@@ -2,11 +2,12 @@ import os
 import json
 import requests
 import platform
+
+from yachalk import chalk
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
@@ -44,7 +45,12 @@ DEV_PACKAGES = {
 
 
 def main():
-    set_secret_manager_env()
+    try:
+        set_secret_manager_env()
+        print(chalk.green.bold("env 로드 성공"))
+    except:
+        print(chalk.red.bold("env 로드 실패"))
+        return
 
     if platform.system() != 'Darwin':
         print('해당 CLI는 MAC에서만 작동합니다.')
@@ -53,7 +59,6 @@ def main():
     if os.system('which brew') != 0:
         os.system('/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"')
     
-    print(os.system('which brew'))
     if os.system('which mas') != 0:
         os.system('brew install mas')
 

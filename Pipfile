@@ -11,6 +11,7 @@ fake-useragent = "*"
 inquirerpy = "*"
 requests = "*"
 python-dotenv = "*"
+yachalk = "*"
 
 [dev-packages]
 
